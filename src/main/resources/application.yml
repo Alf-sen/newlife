@@ -7,4 +7,9 @@ github:
     secret: c44c58bad561ee6619b8c45cfd540f39577547e4
   redirect:
     uri: http://localhost:8887/callback
-
+spring:
+  datasource:
+    url: jdbc:h2:~/newlife
+    username: sa
+    password: 123
+    driver-class-name: org.h2.Driver

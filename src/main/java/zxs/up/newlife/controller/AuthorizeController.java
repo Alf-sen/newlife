@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import zxs.up.newlife.dto.AccessTokenDTO;
 import zxs.up.newlife.dto.GithubUser;
+import zxs.up.newlife.mapper.UserMapper;
+import zxs.up.newlife.model.User;
 import zxs.up.newlife.provider.GithubProvider;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 /**
  * @auther ZhangXiusen
@@ -31,7 +34,8 @@ public class AuthorizeController {
     @Value("${github.redirect.uri}")
     private String redirectUri;
 
-
+    @Autowired
+    private UserMapper userMapper;
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
@@ -45,11 +49,18 @@ public class AuthorizeController {
         accessTokenDTO.setRedirect_uri(redirectUri);
         accessTokenDTO.setState(state);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
-        GithubUser user = githubProvider.getUser(accessToken);
+        GithubUser githubUser = githubProvider.getUser(accessToken);
 
-        if (user != null) {
+        if (githubUser != null) {
+            User user = new User();
+            user.setName(githubUser.getName());
+            user.setAccountId(String.valueOf(githubUser.getId()));
+            user.setToken(UUID.randomUUID().toString());
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModified(System.currentTimeMillis());
+            userMapper.insert(user);
             //登录成功，写cookie和session
-            request.getSession().setAttribute("user", user);
+            request.getSession().setAttribute("user", githubUser);
             return "redirect:/";
         } else {
             //登录失败，重新登录
