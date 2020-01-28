@@ -12,7 +12,9 @@ import zxs.up.newlife.mapper.UserMapper;
 import zxs.up.newlife.model.User;
 import zxs.up.newlife.provider.GithubProvider;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 /**
@@ -40,7 +42,8 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
-                           HttpServletRequest request) {
+                           HttpServletRequest request,
+                           HttpServletResponse response) {
 
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
@@ -55,12 +58,13 @@ public class AuthorizeController {
             User user = new User();
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setToken(UUID.randomUUID().toString());
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(System.currentTimeMillis());
             userMapper.insert(user);
-            //登录成功，写cookie和session
-            request.getSession().setAttribute("user", githubUser);
+            response.addCookie(new Cookie("token", token));
+
             return "redirect:/";
         } else {
             //登录失败，重新登录
