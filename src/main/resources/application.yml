@@ -9,7 +9,7 @@ github:
     uri: http://localhost:8887/callback
 spring:
   datasource:
-    url: jdbc:h2:~/newlife
-    username: sa
-    password: 123
-    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://localhost:3306/world?characterEncoding=utf-8&serverTimezone=UTC
+    username: root
+    password: zxs123
+    driver-class-name: com.mysql.cj.jdbc.Driver

@@ -42,7 +42,6 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
-                           HttpServletRequest request,
                            HttpServletResponse response) {
 
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
@@ -65,10 +64,10 @@ public class AuthorizeController {
             userMapper.insert(user);
             response.addCookie(new Cookie("token", token));
 
-            return "redirect:/";
+            return "redirect:/publish";
         } else {
             //登录失败，重新登录
-            return "redirect:/";
+            return "redirect:/publish";
         }
     }
 }
