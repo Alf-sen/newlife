@@ -6,6 +6,7 @@
 [Bootstrap 文档](https://v3.bootcss.com/components/?#navbar-default)  
 [Github OAuth 文档](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/)  
 [OKHttp 文档](https://square.github.io/okhttp/)
+[Lombok 省略get,set](https://projectlombok.org/)
 
 ##工具
 git  

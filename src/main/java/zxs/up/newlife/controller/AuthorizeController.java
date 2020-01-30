@@ -33,6 +33,9 @@ public class AuthorizeController {
     @Value("${github.client.secret}")
     private String clientSecret;
 
+    @Value("${github.client.avatarUrl}")
+    private String avatarUrl;
+
     @Value("${github.redirect.uri}")
     private String redirectUri;
 
@@ -50,6 +53,7 @@ public class AuthorizeController {
         accessTokenDTO.setCode(code);
         accessTokenDTO.setRedirect_uri(redirectUri);
         accessTokenDTO.setState(state);
+
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToken);
 
@@ -61,13 +65,14 @@ public class AuthorizeController {
             user.setToken(token);
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(System.currentTimeMillis());
+            user.setAvatarUrl(avatarUrl);
             userMapper.insert(user);
             response.addCookie(new Cookie("token", token));
 
-            return "redirect:/publish";
+            return "redirect:/";
         } else {
             //登录失败，重新登录
-            return "redirect:/publish";
+            return "redirect:/";
         }
     }
 }
