@@ -33,9 +33,6 @@ public class AuthorizeController {
     @Value("${github.client.secret}")
     private String clientSecret;
 
-    @Value("${github.client.avatarUrl}")
-    private String avatarUrl;
-
     @Value("${github.redirect.uri}")
     private String redirectUri;
 
@@ -65,7 +62,7 @@ public class AuthorizeController {
             user.setToken(token);
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(System.currentTimeMillis());
-            user.setAvatarUrl(avatarUrl);
+            user.setAvatarUrl(githubUser.getAvatarUrl());
             userMapper.insert(user);
             response.addCookie(new Cookie("token", token));
 
