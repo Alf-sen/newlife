@@ -8,6 +8,7 @@
 [OKHttp 文档](https://square.github.io/okhttp/)  
 [Lombok 省略get,set](https://projectlombok.org/)  
 [thymeleaf 模板文档](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)
+[jquery 文档](https://www.jquery.com)  
 
 ##工具
 git  
