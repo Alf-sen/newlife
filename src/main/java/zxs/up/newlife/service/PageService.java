@@ -43,9 +43,10 @@ public class PageService {
                 questionDTOList.add(questionDTO);
             }
         }
-
+        //获取总的数据量
+        Integer count = questionMapper.getCount();
         //设置分页数据
-        PageDTO pageDTO = setPageDTO(questionDTOList, page, size);
+        PageDTO pageDTO = setPageDTO(questionDTOList, page, size, count);
         return pageDTO;
     }
 
@@ -56,11 +57,9 @@ public class PageService {
      * @param size
      * @return
      */
-    private PageDTO setPageDTO(List<QuestionDTO> questionDTOList, Integer page, Integer size) {
+    private PageDTO setPageDTO(List<QuestionDTO> questionDTOList, Integer page, Integer size, Integer count) {
         List<Integer> pageList = new ArrayList<>();
         PageDTO pageDTO = new PageDTO();
-        //获取总的数据量
-        Integer count = questionMapper.getCount();
 
         //计算总页数
         Integer totalPage;
@@ -74,7 +73,7 @@ public class PageService {
         if (page < 1) {
             page = 1;
         }
-        if (page > totalPage) {
+        if (page > totalPage && totalPage >= 1) {
             page = totalPage;
         }
 
@@ -116,6 +115,31 @@ public class PageService {
         pageDTO.setPage(page);
         pageDTO.setQuestions(questionDTOList);
 
+        return pageDTO;
+    }
+
+    public PageDTO getUserPageDTO(Integer userId, Integer page, Integer size) {
+
+        //计算传递的真正页数
+        Integer realPage = size * (page - 1);
+
+        List<QuestionDTO> questionDTOList = new ArrayList<>();
+        //获取分页数据
+        List<Question> questionList = questionMapper.selectByUerId(userId, realPage, size);
+        if (questionList != null && questionList.size() > 0) {
+            for (int i = 0; i < questionList.size(); i++) {
+                QuestionDTO questionDTO = new QuestionDTO();
+                Question question = questionList.get(i);
+                User user = userMapper.findById(question.getCreator());
+                BeanUtils.copyProperties(question, questionDTO);
+                questionDTO.setUser(user);
+                questionDTOList.add(questionDTO);
+            }
+        }
+
+        Integer count = questionMapper.getUserCount(userId);
+        //设置分页数据
+        PageDTO pageDTO = setPageDTO(questionDTOList, page, size, count);
         return pageDTO;
     }
 }

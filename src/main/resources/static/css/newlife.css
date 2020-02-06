@@ -16,3 +16,11 @@ body {
     font-weight: normal;
     color: #999;
 }
+
+.profile .nav {
+    margin-top: 30px;
+}
+
+.img-size {
+    width: 40px;
+}

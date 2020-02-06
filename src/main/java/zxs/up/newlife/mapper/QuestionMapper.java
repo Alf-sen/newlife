@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import zxs.up.newlife.model.Question;
 
 import java.util.List;
@@ -24,4 +25,10 @@ public interface QuestionMapper {
 
     @Select("select count(1) from question")
     Integer getCount();
+
+    @Select("select * from question where creator = #{userId} limit #{page}, #{size}")
+    List<Question> selectByUerId(@Param("userId") Integer userId, @Param("page") Integer page, @Param("size") Integer size);
+
+    @Select("select count(1) from question where creator = #{userId}")
+    Integer getUserCount(@Param("userId") Integer userId);
 }
