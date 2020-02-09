@@ -16,8 +16,6 @@ spring:
   devtools:
     livereload:
       enabled: true
-  mvc:
-    static-path-pattern: /static/**
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
