@@ -30,23 +30,7 @@ public class IndexController {
     @GetMapping("/")
     public String index(@RequestParam(value = "page", defaultValue = "1") Integer page,
                         @RequestParam(value = "size", defaultValue = "5") Integer size,
-                        HttpServletRequest request,
                         Model model) {
-
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null && cookies.length != 0) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    User user = userMapper.findByToken(token);
-                    //登录成功，写cookie和session
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                    }
-                    break;
-                }
-            }
-        }
 
         PageDTO pignation = pageService.getPageDTO(page, size);
         model.addAttribute("pignation", pignation);
