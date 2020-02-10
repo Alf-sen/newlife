@@ -10,6 +10,7 @@ import zxs.up.newlife.mapper.UserMapper;
 import zxs.up.newlife.model.Question;
 import zxs.up.newlife.model.User;
 
+import javax.naming.ldap.PagedResultsControl;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -141,5 +142,15 @@ public class PageService {
         //设置分页数据
         PageDTO pageDTO = setPageDTO(questionDTOList, page, size, count);
         return pageDTO;
+    }
+
+    public QuestionDTO getQuestion(String id) {
+
+        QuestionDTO questionDTO = new QuestionDTO();
+        Question question = questionMapper.getQuestionById(id);
+        BeanUtils.copyProperties(question, questionDTO);
+        User user = userMapper.findById(question.getCreator());
+        questionDTO.setUser(user);
+        return questionDTO;
     }
 }
