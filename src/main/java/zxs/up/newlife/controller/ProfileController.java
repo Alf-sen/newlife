@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import zxs.up.newlife.dto.PageDTO;
 import zxs.up.newlife.model.User;
-import zxs.up.newlife.service.PageService;
+import zxs.up.newlife.service.QuestionService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ProfileController {
 
     @Autowired
-    PageService pageService;
+    QuestionService questionService;
 
     @GetMapping("/profile/{action}")
     public String profile(@RequestParam(value = "page", defaultValue = "1") Integer page,
@@ -43,7 +43,7 @@ public class ProfileController {
             model.addAttribute("sectionName", "最新回复");
         }
 
-        PageDTO pignation = pageService.getUserPageDTO(user.getId(), page, size);
+        PageDTO pignation = questionService.getUserPageDTO(user.getId(), page, size);
         model.addAttribute("pignation", pignation);
         return "profile";
     }

@@ -31,4 +31,7 @@ public interface QuestionMapper {
 
     @Select("select count(1) from question where creator = #{userId}")
     Integer getUserCount(@Param("userId") Integer userId);
+
+    @Select("select * from question where id = #{id}")
+    Question getQuestionById(@Param("id") String id);
 }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>秀森新生活</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/static//css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static//css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/static//css/newlife.css">
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js" type="application/javascript"></script>
+</head>
+<body>
+<div th:insert="navigation :: nav"></div>
+<div class="container-fluid main">
+    <div class="row profile">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h2><span th:text="${question.title}"></span></h2>
+            <h4>
+                <span class="text-desc">
+                        作者：<span th:text="${question.user.name}"></span> |
+                        发布时间：<span th:text="${#dates.format(question.user.gmtCreate, 'yyyy-MM-dd')}"></span> |
+                        阅读数：<span th:text="${question.viewCount}"></span>
+                </span>
+            </h4>
+            <hr>
+            <h4 th:text="${question.description}"></h4>
+            <hr>
+            <a th:href="@{'publish' + ${question.id}}">
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
+            </a>
+
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <div class="list-group nav">
+                <h2>发起人</h2>
+                <div class="media">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object img-circle img-size" th:src="${question.user.avatarUrl}" alt="smile">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading" >
+                            <span th:text="${question.user.name}"></span>
+                        </h4>
+                    </div>
+                </div>
+                <hr>
+                <h4>相关问题</h4>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

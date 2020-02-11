@@ -19,7 +19,7 @@ import java.util.List;
  * @date 2020/02/01 21:18
  */
 @Service
-public class PageService {
+public class QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
 

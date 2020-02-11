@@ -11,6 +11,7 @@ import zxs.up.newlife.dto.GithubUser;
 import zxs.up.newlife.mapper.UserMapper;
 import zxs.up.newlife.model.User;
 import zxs.up.newlife.provider.GithubProvider;
+import zxs.up.newlife.service.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -37,12 +38,13 @@ public class AuthorizeController {
     private String redirectUri;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
-                           HttpServletResponse response) {
+                           HttpServletResponse response,
+                           HttpServletRequest request) {
 
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
@@ -63,13 +65,31 @@ public class AuthorizeController {
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(System.currentTimeMillis());
             user.setAvatarUrl(githubUser.getAvatarUrl());
-            userMapper.insert(user);
+            userService.updateUser(user);
             response.addCookie(new Cookie("token", token));
+            //登录成功，写cookie和session
+            if (user != null) {
+                request.getSession().setAttribute("user", user);
+            }
 
             return "redirect:/";
         } else {
             //登录失败，重新登录
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response) {
+        //清除Session
+        request.getSession().removeAttribute("user");
+
+        //清除Token
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return "redirect:/";
     }
 }

@@ -1,9 +1,6 @@
 package zxs.up.newlife.mapper;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import zxs.up.newlife.model.User;
 
 /**
@@ -21,4 +18,10 @@ public interface UserMapper {
 
     @Select("select * from user where id = #{id}")
     User findById(@Param("id")int creator);
+
+    @Select("select * from user where account_id = #{accountId}")
+    User findByAccountId(@Param("accountId")String accountId);
+
+    @Update("update user set name = #{name}, gmt_modified = #{gmtModified}, avatar_url = #{avatarUrl} where account_id = #{accountId}")
+    void update(User user);
 }
