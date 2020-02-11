@@ -28,4 +28,10 @@ public class UserService {
             userMapper.update(user);
         }
     }
+
+    public User findByToken(String token) {
+        User user = userMapper.findByToken(token);
+
+        return user;
+    }
 }

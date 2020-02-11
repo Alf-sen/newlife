@@ -67,9 +67,10 @@ public class AuthorizeController {
             user.setAvatarUrl(githubUser.getAvatarUrl());
             userService.updateUser(user);
             response.addCookie(new Cookie("token", token));
+            User dbUser = userService.findByToken(token);
             //登录成功，写cookie和session
             if (user != null) {
-                request.getSession().setAttribute("user", user);
+                request.getSession().setAttribute("user", dbUser);
             }
 
             return "redirect:/";

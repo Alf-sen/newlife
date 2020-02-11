@@ -26,7 +26,7 @@
             <hr>
             <h4 th:text="${question.description}"></h4>
             <hr>
-            <a th:href="@{'publish' + ${question.id}}">
+            <a th:href="@{'/publish/' + ${question.id}}" th:if="${session.user.getName() == question.user.name}">
                 <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
             </a>
 
@@ -48,8 +48,6 @@
                 </div>
                 <hr>
                 <h4>相关问题</h4>
-
-
             </div>
         </div>
     </div>
