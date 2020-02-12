@@ -5,10 +5,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import zxs.up.newlife.mapper.UserMapper;
 import zxs.up.newlife.model.User;
+import zxs.up.newlife.model.UserExample;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @auther ZhangXiusen
@@ -26,10 +28,13 @@ public class SessionInterceptor implements HandlerInterceptor {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
-                    User user = userMapper.findByToken(token);
+                    UserExample userExample = new UserExample();
+                    userExample.createCriteria()
+                            .andTokenEqualTo(token);
+                    List<User> userList = userMapper.selectByExample(userExample);;
                     //登录成功，写cookie和session
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
+                    if (userList.size() != 0) {
+                        request.getSession().setAttribute("user", userList.get(0));
                     }
                     break;
                 }

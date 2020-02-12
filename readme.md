@@ -14,7 +14,9 @@
 git  
 ideal
 
-
+##命令
+执行mybatis generator
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 ##注意
 1、增加interceptor后会导致静态资源被拦截。处理方法有三步：  
   第一步：实现WebMvcConfigurer的类中拦截器中添加排除资源处添加静态资源文件路径：  

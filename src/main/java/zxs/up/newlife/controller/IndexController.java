@@ -21,6 +21,7 @@ public class IndexController {
 
     @Autowired
     private QuestionService questionService;
+
     @GetMapping("/")
     public String index(@RequestParam(value = "page", defaultValue = "1") Integer page,
                         @RequestParam(value = "size", defaultValue = "5") Integer size,

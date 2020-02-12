@@ -1,5 +1,6 @@
 package zxs.up.newlife.service;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import zxs.up.newlife.dto.QuestionDTO;
 import zxs.up.newlife.mapper.QuestionMapper;
 import zxs.up.newlife.mapper.UserMapper;
 import zxs.up.newlife.model.Question;
+import zxs.up.newlife.model.QuestionExample;
 import zxs.up.newlife.model.User;
 
 import javax.naming.ldap.PagedResultsControl;
@@ -33,19 +35,20 @@ public class QuestionService {
 
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         //获取分页数据
-        List<Question> questionList = questionMapper.selectAll(realPage, size);
+
+        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(realPage, size));
         if (questionList != null && questionList.size() > 0) {
             for (int i = 0; i < questionList.size(); i++) {
                 QuestionDTO questionDTO = new QuestionDTO();
                 Question question = questionList.get(i);
-                User user = userMapper.findById(question.getCreator());
+                User user = userMapper.selectByPrimaryKey(question.getCreator());
                 BeanUtils.copyProperties(question, questionDTO);
                 questionDTO.setUser(user);
                 questionDTOList.add(questionDTO);
             }
         }
         //获取总的数据量
-        Integer count = questionMapper.getCount();
+        Integer count = (int) questionMapper.countByExample(new QuestionExample());
         //设置分页数据
         PageDTO pageDTO = setPageDTO(questionDTOList, page, size, count);
         return pageDTO;
@@ -126,19 +129,25 @@ public class QuestionService {
 
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         //获取分页数据
-        List<Question> questionList = questionMapper.selectByUerId(userId, realPage, size);
+        QuestionExample example = new QuestionExample();
+        example.createCriteria()
+                .andCreatorEqualTo(userId);
+        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(example, new RowBounds(realPage, size));
         if (questionList != null && questionList.size() > 0) {
             for (int i = 0; i < questionList.size(); i++) {
                 QuestionDTO questionDTO = new QuestionDTO();
                 Question question = questionList.get(i);
-                User user = userMapper.findById(question.getCreator());
+                User user = userMapper.selectByPrimaryKey(question.getCreator());
                 BeanUtils.copyProperties(question, questionDTO);
                 questionDTO.setUser(user);
                 questionDTOList.add(questionDTO);
             }
         }
 
-        Integer count = questionMapper.getUserCount(userId);
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria()
+                .andCreatorEqualTo(userId);
+        Integer count = (int) questionMapper.countByExample(questionExample);
         //设置分页数据
         PageDTO pageDTO = setPageDTO(questionDTOList, page, size, count);
         return pageDTO;
@@ -147,9 +156,9 @@ public class QuestionService {
     public QuestionDTO getQuestion(Integer id) {
 
         QuestionDTO questionDTO = new QuestionDTO();
-        Question question = questionMapper.getQuestionById(id);
+        Question question = questionMapper.selectByPrimaryKey(id);
         BeanUtils.copyProperties(question, questionDTO);
-        User user = userMapper.findById(question.getCreator());
+        User user = userMapper.selectByPrimaryKey(question.getCreator());
         questionDTO.setUser(user);
         return questionDTO;
     }
@@ -159,11 +168,19 @@ public class QuestionService {
             //新增
             questionMapper.insert(question);
         } else {
-            questionMapper.update(question);
+            Question updateQuestion = new Question();
+            updateQuestion.setTitle(question.getTitle());
+            updateQuestion.setGmtModified(question.getGmtModified());
+            updateQuestion.setDescription(question.getDescription());
+            updateQuestion.setTag(question.getTag());
+            QuestionExample example = new QuestionExample();
+            example.createCriteria()
+                    .andIdEqualTo(question.getId());
+            questionMapper.updateByExampleSelective(updateQuestion, example);
         }
     }
 
     public Question getQuestionById(Integer id) {
-        return questionMapper.getQuestionById(id);
+        return questionMapper.selectByPrimaryKey(id);
     }
 }

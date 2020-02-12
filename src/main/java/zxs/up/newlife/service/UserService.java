@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import zxs.up.newlife.dto.GithubUser;
 import zxs.up.newlife.mapper.UserMapper;
 import zxs.up.newlife.model.User;
+import zxs.up.newlife.model.UserExample;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -20,17 +22,31 @@ public class UserService {
 
     public void updateUser(User user) {
         //获取数据库数据
-        User dbUser = userMapper.findByAccountId(user.getAccountId());
-        if (dbUser == null) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria()
+                .andAccountIdEqualTo(user.getAccountId());
+        List<User> dbUserList = userMapper.selectByExample(userExample);
+        if (dbUserList.size() == 0) {
             //新增
             userMapper.insert(user);
         } else {
-            userMapper.update(user);
+            User updateUser = new User();
+            updateUser.setName(user.getName());
+            updateUser.setGmtModified(user.getGmtModified());
+            updateUser.setAvatarUrl(user.getAvatarUrl());
+            updateUser.setToken(user.getToken());
+            UserExample example = new UserExample();
+            example.createCriteria()
+                    .andIdEqualTo(dbUserList.get(0).getId());
+            userMapper.updateByExampleSelective(updateUser, userExample);
         }
     }
 
     public User findByToken(String token) {
-        User user = userMapper.findByToken(token);
+        UserExample userExample = new UserExample();
+        userExample.createCriteria()
+                .andTokenEqualTo(token);
+        User user = userMapper.selectByExample(userExample).get(0);
 
         return user;
     }
