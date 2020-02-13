@@ -16,6 +16,10 @@ spring:
   devtools:
     livereload:
       enabled: true
+  mvc:
+    hrow-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
 mybatis:
   configuration:
     map-underscore-to-camel-case: true

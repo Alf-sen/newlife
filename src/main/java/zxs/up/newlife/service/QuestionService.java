@@ -6,13 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import zxs.up.newlife.dto.PageDTO;
 import zxs.up.newlife.dto.QuestionDTO;
+import zxs.up.newlife.exception.CustomizeErrorCode;
+import zxs.up.newlife.exception.CustomizeException;
 import zxs.up.newlife.mapper.QuestionMapper;
 import zxs.up.newlife.mapper.UserMapper;
 import zxs.up.newlife.model.Question;
 import zxs.up.newlife.model.QuestionExample;
 import zxs.up.newlife.model.User;
 
-import javax.naming.ldap.PagedResultsControl;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -157,6 +158,9 @@ public class QuestionService {
 
         QuestionDTO questionDTO = new QuestionDTO();
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question == null) {
+            throw new CustomizeException(CustomizeErrorCode.NOT_FOUND_QUESTION);
+        }
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
         questionDTO.setUser(user);
