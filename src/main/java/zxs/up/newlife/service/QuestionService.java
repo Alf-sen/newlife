@@ -8,6 +8,7 @@ import zxs.up.newlife.dto.PageDTO;
 import zxs.up.newlife.dto.QuestionDTO;
 import zxs.up.newlife.exception.CustomizeErrorCode;
 import zxs.up.newlife.exception.CustomizeException;
+import zxs.up.newlife.mapper.QuestionExcMapper;
 import zxs.up.newlife.mapper.QuestionMapper;
 import zxs.up.newlife.mapper.UserMapper;
 import zxs.up.newlife.model.Question;
@@ -25,6 +26,9 @@ import java.util.List;
 public class QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
+
+    @Autowired
+    private QuestionExcMapper questionExcMapper;
 
     @Autowired
     private UserMapper userMapper;
@@ -161,6 +165,9 @@ public class QuestionService {
         if (question == null) {
             throw new CustomizeException(CustomizeErrorCode.NOT_FOUND_QUESTION);
         }
+        questionExcMapper.updateViewCount(id);
+        //修改viewCount后的question
+        question = questionMapper.selectByPrimaryKey(id);
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
         questionDTO.setUser(user);
@@ -170,6 +177,9 @@ public class QuestionService {
     public void update(Question question) {
         if (question.getId() == null) {
             //新增
+            question.setViewCount(0);
+            question.setLikeCount(0);
+            question.setCommentCount(0);
             questionMapper.insert(question);
         } else {
             Question updateQuestion = new Question();
