@@ -10,6 +10,9 @@ import org.apache.ibatis.annotations.Update;
  */
 public interface QuestionExcMapper {
 
-    @Update("update question set view_Count = view_Count + 1 where id = ${id}")
+    @Update("update question set view_count = view_count + 1 where id = ${id}")
     void updateViewCount(@Param("id") Integer id);
+
+    @Update("update question set comment_count = comment_count + 1 where id = ${id}")
+    void updateCommentCount(@Param("id") Integer id);
 }

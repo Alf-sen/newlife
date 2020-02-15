@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import zxs.up.newlife.dto.PageDTO;
 import zxs.up.newlife.dto.QuestionDTO;
-import zxs.up.newlife.exception.CustomizeErrorCode;
+import zxs.up.newlife.enums.CustomizeCodeEnum;
 import zxs.up.newlife.exception.CustomizeException;
 import zxs.up.newlife.mapper.QuestionExcMapper;
 import zxs.up.newlife.mapper.QuestionMapper;
@@ -163,7 +163,7 @@ public class QuestionService {
         QuestionDTO questionDTO = new QuestionDTO();
         Question question = questionMapper.selectByPrimaryKey(id);
         if (question == null) {
-            throw new CustomizeException(CustomizeErrorCode.NOT_FOUND_QUESTION);
+            throw new CustomizeException(CustomizeCodeEnum.QUESTION_NOT_FOUND);
         }
         questionExcMapper.updateViewCount(id);
         //修改viewCount后的question
