@@ -24,3 +24,16 @@ body {
 .img-size {
     width: 40px;
 }
+
+.user-name {
+    margin-top: 10px;
+}
+
+.btn-comment {
+    float: right;
+    margin-bottom: 15px;
+}
+
+.comment-section {
+    margin: 15px;
+}

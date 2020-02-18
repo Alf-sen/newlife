@@ -8,8 +8,18 @@
     <link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/static/css/newlife.css">
     <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script src="/static/js/comment.js"></script>
     <script src="/static/js/bootstrap.min.js" type="application/javascript"></script>
 </head>
+<script type="application/javascript">
+    window.onload = function () {
+        var closable = window.localStorage.getItem("closable");
+        if (closable == "true") {
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
 <body>
 <div th:insert="navigation :: nav"></div>
 <div class="container-fluid main">

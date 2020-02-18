@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/static//css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/static//css/newlife.css">
     <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script src="/static/js/comment.js"></script>
     <script src="/static/js/bootstrap.min.js" type="application/javascript"></script>
 </head>
 <body>
@@ -15,20 +16,41 @@
 <div class="container-fluid main">
     <div class="row profile">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h2><span th:text="${question.title}"></span></h2>
-            <h4>
+            <div>
+                <h2><span th:text="${question.title}"></span></h2>
+                <h4>
                 <span class="text-desc">
                         作者：<span th:text="${question.user.name}"></span> |
                         发布时间：<span th:text="${#dates.format(question.gmtModified, 'yyyy-MM-dd')}"></span> |
                         阅读数：<span th:text="${question.viewCount}"></span>
                 </span>
-            </h4>
-            <hr>
-            <h4 th:text="${question.description}"></h4>
-            <hr>
-            <a th:href="@{'/publish/' + ${question.id}}" th:if="${session.user.getName() == question.user.name}">
-                <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
-            </a>
+                </h4>
+                <hr>
+                <h4 th:text="${question.description}"></h4>
+                <hr>
+                <a th:href="@{'/publish/' + ${question.id}}" th:if="${session.user.getName() == question.user.name}">
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
+                </a>
+                <hr>
+            </div>
+
+            <div id="comment_section">
+                <input type="hidden" id="question_id" th:value="${question.id}"/>
+                <div class="media">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object img-rounded img-size" th:src="${question.user.avatarUrl}" alt="smile">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading user-name" >
+                            <span th:text="${question.user.name}"></span>
+                        </h4>
+                    </div>
+                </div>
+                <textarea class="form-control comment-section" rows="6" id="comment"></textarea>
+                <button type="button" class="btn btn-success btn-comment" onclick="post()">回复</button>
+            </div>
 
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
@@ -41,7 +63,7 @@
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading" >
+                        <h4 class="media-heading user-name" >
                             <span th:text="${question.user.name}"></span>
                         </h4>
                     </div>

@@ -2,6 +2,7 @@ package zxs.up.newlife.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import zxs.up.newlife.enums.CommentTypeEnum;
 import zxs.up.newlife.enums.CustomizeCodeEnum;
 import zxs.up.newlife.exception.CustomizeException;
@@ -27,6 +28,7 @@ public class CommentService {
     @Autowired
     private QuestionExcMapper questionExcMapper;
 
+    @Transactional
     public void insert(Comment comment) {
         //判断回复问题是否存在
         if (comment.getParentId() == null || comment.getParentId() == 0) {
