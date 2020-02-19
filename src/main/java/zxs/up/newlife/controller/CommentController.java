@@ -26,10 +26,10 @@ import java.util.Map;
 public class CommentController {
 
     @Autowired
-    CommentService commentService;
+    private CommentService commentService;
 
     @Autowired
-    QuestionMapper questionMapper;
+    private QuestionMapper questionMapper;
 
     @ResponseBody
     @RequestMapping("/comment")

@@ -6,8 +6,8 @@ package zxs.up.newlife.enums;
  * @date 2020/2/15 0015 17:26
  */
 public enum CommentTypeEnum {
-    COMMENT(1),
-    QUESTION(2);
+    QUESTION(1),
+    COMMENT(2);
 
     private Integer type;
 

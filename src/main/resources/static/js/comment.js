@@ -1,7 +1,7 @@
 function post() {
 
     var questionId = $("#question_id:hidden").val();
-    var content = $("#content").val();
+    var content = $("#question_comment").val();
     $.ajax({
         type: "POST",
         url: "/comment",
@@ -9,7 +9,7 @@ function post() {
         data: JSON.stringify({
             "parentId":questionId,
             "content":content,
-            "type":2
+            "type":1
         }),
         success: function (response) {
             if (response.code == "2004") {

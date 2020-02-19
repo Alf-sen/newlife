@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ProfileController {
 
     @Autowired
-    QuestionService questionService;
+    private QuestionService questionService;
 
     @GetMapping("/profile/{action}")
     public String profile(@RequestParam(value = "page", defaultValue = "1") Integer page,
