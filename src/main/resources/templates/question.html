@@ -31,7 +31,23 @@
                 <a th:href="@{'/publish/' + ${question.id}}" th:if="${session.user.getName() == question.user.name}">
                     <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
                 </a>
-                <hr>
+            </div>
+
+            <div>
+                <h3 class="border-bottom comment"><span th:text="${question.commentCount}"></span> 个回复</h3>
+                <div class="media">
+                    <div class="media-left">
+                        <a href="#">g
+                            <img class="media-object img-rounded img-size" th:src="${question.user.avatarUrl}" alt="smile">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading user-name" >
+                            <span th:text="${question.user.name}"></span>
+                        </h4>
+                        <h4><span></span>dsfsdfsdf</h4>
+                    </div>
+                </div>
             </div>
 
             <div id="comment_section">
