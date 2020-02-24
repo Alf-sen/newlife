@@ -4,19 +4,23 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import zxs.up.newlife.dto.CommentDTO;
 import zxs.up.newlife.dto.PageDTO;
 import zxs.up.newlife.dto.QuestionDTO;
+import zxs.up.newlife.enums.CommentTypeEnum;
 import zxs.up.newlife.enums.CustomizeCodeEnum;
 import zxs.up.newlife.exception.CustomizeException;
+import zxs.up.newlife.mapper.CommentMapper;
 import zxs.up.newlife.mapper.QuestionExcMapper;
 import zxs.up.newlife.mapper.QuestionMapper;
 import zxs.up.newlife.mapper.UserMapper;
-import zxs.up.newlife.model.Question;
-import zxs.up.newlife.model.QuestionExample;
-import zxs.up.newlife.model.User;
+import zxs.up.newlife.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @auther ZhangXiusen
@@ -32,6 +36,9 @@ public class QuestionService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private CommentMapper commentMapper;
 
     public PageDTO getPageDTO(Integer page, Integer size) {
 
@@ -61,6 +68,7 @@ public class QuestionService {
 
     /**
      * 设置分页数据
+     *
      * @param questionDTOList
      * @param page
      * @param size
@@ -196,5 +204,36 @@ public class QuestionService {
 
     public Question getQuestionById(Integer id) {
         return questionMapper.selectByPrimaryKey(id);
+    }
+
+    public List<CommentDTO> getComment(Integer id) {
+        CommentExample example = new CommentExample();
+        example.createCriteria()
+                .andParentIdEqualTo(id)
+                .andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+        List<Comment> comments = commentMapper.selectByExample(example);
+        if (comments.size() == 0) {
+            return new ArrayList<>();
+        }
+        //获取userId，并用set去重
+        Set<Integer> set = comments.stream().map(Comment::getCommentator).collect(Collectors.toSet());
+        List<Integer> userIds = new ArrayList<>();
+        userIds.addAll(set);
+
+        //获取user信息放入map中
+        UserExample userExample = new UserExample();
+        userExample.createCriteria()
+                .andIdIn(userIds);
+        List<User> users = userMapper.selectByExample(userExample);
+        Map<Integer, User> userMap = users.stream().collect(Collectors.toMap(user -> user.getId(), user -> user));
+
+        List<CommentDTO> commentDTOS = comments.stream().map(comment -> {
+            CommentDTO commentDTO = new CommentDTO();
+            BeanUtils.copyProperties(comment, commentDTO);
+            commentDTO.setUser(userMap.get(comment.getCommentator()));
+            return commentDTO;
+        }).collect(Collectors.toList());
+
+        return commentDTOS;
     }
 }

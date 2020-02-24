@@ -34,18 +34,25 @@
             </div>
 
             <div>
-                <h3 class="border-bottom comment"><span th:text="${question.commentCount}"></span> 个回复</h3>
-                <div class="media">
+                <h3><span th:text="${question.commentCount}"></span> 个回复</h3>
+                <hr class="comment-divide">
+                <div class="media border-bottom" th:each="comment:${comments}">
                     <div class="media-left">
-                        <a href="#">g
-                            <img class="media-object img-rounded img-size" th:src="${question.user.avatarUrl}" alt="smile">
+                        <a href="#">
+                            <img class="media-object img-rounded img-size" th:src="${comment.user.avatarUrl}" alt="smile">
                         </a>
                     </div>
                     <div class="media-body">
                         <h4 class="media-heading user-name" >
-                            <span th:text="${question.user.name}"></span>
+                            <span th:text="${comment.user.name}"></span>
                         </h4>
-                        <h4><span></span>dsfsdfsdf</h4>
+                        <h4><span th:text="${comment.content}"></span></h4>
+                        <div class="menu">
+                            <span class="glyphicon glyphicon-thumbs-up icon" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-thumbs-down icon" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-comment icon" aria-hidden="true"></span>
+                        </div>
+
                     </div>
                 </div>
             </div>

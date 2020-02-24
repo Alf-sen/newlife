@@ -39,6 +39,8 @@ body {
 }
 
 .border-bottom {
+    margin-top: 0px;
+    padding: 15px;
     border-bottom-width: 1px;
     border-bottom-style: solid;
     border-bottom-color: #eee;
@@ -49,7 +51,17 @@ body {
     border-top-style: solid;
     border-top-color: rgb(254, 246, 247);
 }
-
-.comment {
-    padding-bottom: 10px;
+.menu {
+    color: #999;
+    margin-top: 5px;
+}
+.menu .icon {
+    font-size: 15px;
+    padding-right: 6px;
+}
+.menu .icon:hover{
+    color: #2aabd2;
+}
+.comment-divide {
+    margin-bottom: 0px;
 }
