@@ -4,6 +4,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 import zxs.up.newlife.dto.CommentDTO;
 import zxs.up.newlife.dto.PageDTO;
 import zxs.up.newlife.dto.QuestionDTO;
@@ -48,7 +49,9 @@ public class QuestionService {
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         //获取分页数据
 
-        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(realPage, size));
+        QuestionExample example = new QuestionExample();
+        example.setOrderByClause("gmt_create desc");
+        List<Question> questionList = questionMapper.selectByExampleWithRowbounds(example, new RowBounds(realPage, size));
         if (questionList != null && questionList.size() > 0) {
             for (int i = 0; i < questionList.size(); i++) {
                 QuestionDTO questionDTO = new QuestionDTO();
@@ -206,11 +209,12 @@ public class QuestionService {
         return questionMapper.selectByPrimaryKey(id);
     }
 
-    public List<CommentDTO> getComment(Integer id) {
+    public List<CommentDTO> getComment(Integer id, CommentTypeEnum question) {
         CommentExample example = new CommentExample();
         example.createCriteria()
                 .andParentIdEqualTo(id)
-                .andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+                .andTypeEqualTo(question.getType());
+        example.setOrderByClause("gmt_create desc");
         List<Comment> comments = commentMapper.selectByExample(example);
         if (comments.size() == 0) {
             return new ArrayList<>();
@@ -235,5 +239,47 @@ public class QuestionService {
         }).collect(Collectors.toList());
 
         return commentDTOS;
+    }
+
+    public List<CommentDTO> getComment(Integer id) {
+        CommentExample example = new CommentExample();
+        example.createCriteria()
+                .andIdEqualTo(id)
+                .andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+        example.setOrderByClause("gmt_create desc");
+        List<Comment> comments = commentMapper.selectByExample(example);
+        if (comments.size() == 0) {
+            return new ArrayList<>();
+        }
+        //获取userId，并用set去重
+        Set<Integer> set = comments.stream().map(Comment::getCommentator).collect(Collectors.toSet());
+        List<Integer> userIds = new ArrayList<>();
+        userIds.addAll(set);
+
+        //获取user信息放入map中
+        UserExample userExample = new UserExample();
+        userExample.createCriteria()
+                .andIdIn(userIds);
+        List<User> users = userMapper.selectByExample(userExample);
+        Map<Integer, User> userMap = users.stream().collect(Collectors.toMap(user -> user.getId(), user -> user));
+
+        List<CommentDTO> commentDTOS = comments.stream().map(comment -> {
+            CommentDTO commentDTO = new CommentDTO();
+            BeanUtils.copyProperties(comment, commentDTO);
+            commentDTO.setUser(userMap.get(comment.getCommentator()));
+            return commentDTO;
+        }).collect(Collectors.toList());
+
+        return commentDTOS;
+    }
+
+    public List<QuestionDTO> getRelatedQuestion(QuestionDTO question) {
+        String tag = StringUtils.replace(question.getTag(), "，", "|");
+        QuestionDTO questionDTO = new QuestionDTO();
+        questionDTO.setTag(tag);
+        questionDTO.setId(question.getId());
+        List<QuestionDTO> questionDTOList = questionExcMapper.getRelatedQuestion(questionDTO);
+
+        return questionDTOList;
     }
 }

@@ -10,5 +10,12 @@ import org.apache.ibatis.annotations.Update;
 public interface CommentExcMapper {
 
     @Update("update comment set like_count = like_count + 1 where id = ${id}")
-    void updateLikeCount(@Param("id") Integer id);
+    void addLikeCount(@Param("id") Integer id);
+
+    @Update("update comment set like_count = like_count - 1 where id = ${id}")
+    void lessLikeCount(@Param("id") Integer id);
+
+    @Update("update comment set comment_count = comment_count + 1 where id = ${id}")
+    void updateCommentCount(@Param("id") Integer id);
+
 }

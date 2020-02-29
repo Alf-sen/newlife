@@ -2,6 +2,9 @@ package zxs.up.newlife.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
+import zxs.up.newlife.dto.QuestionDTO;
+
+import java.util.List;
 
 /**
  * @auther ZhangXiusen
@@ -15,4 +18,6 @@ public interface QuestionExcMapper {
 
     @Update("update question set comment_count = comment_count + 1 where id = ${id}")
     void updateCommentCount(@Param("id") Integer id);
+
+    List<QuestionDTO> getRelatedQuestion(QuestionDTO question);
 }

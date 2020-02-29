@@ -11,7 +11,8 @@ public enum CustomizeCodeEnum {
     NO_LOGIN("2003", "没有登录，请登录后再操作"),
     COMMENT_SUCCESS("2004", "回复成功"),
     TYPE_PARAM_WRONG("2005", "评论类型错误或不存在"),
-    SYS_ERROR("2006", "服务器异常");
+    SYS_ERROR("2006", "服务器异常"),
+    COMMENT_IS_NULL("2007", "评论为空");
 
     private String code;
 

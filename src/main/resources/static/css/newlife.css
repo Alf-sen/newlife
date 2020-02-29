@@ -1,6 +1,7 @@
 body {
     background-color: #efefef;
 }
+
 .main {
     background-color: white;
     margin: 35px;
@@ -51,17 +52,84 @@ body {
     border-top-style: solid;
     border-top-color: rgb(254, 246, 247);
 }
+
 .menu {
     color: #999;
     margin-top: 5px;
 }
+
+.menu .active {
+    color: #2aabd2;
+}
+
 .menu .icon {
     font-size: 15px;
     padding-right: 6px;
 }
-.menu .icon:hover{
+
+.menu .icon:hover {
     color: #2aabd2;
 }
+
+.menu .time {
+    float: right;
+}
+
 .comment-divide {
     margin-bottom: 0px;
+}
+
+.deploy {
+    margin: 15px 0px;
+    border-radius: 10px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #eee;
+}
+
+.form-deploy {
+    margin-top: 10px;
+}
+
+.btn-deploy {
+    margin: 10px 0;
+}
+
+.toolbox-list {
+    display: flex;
+    flex-wrap: nowrap;
+    list-style: none;
+    padding-inline-start: 0px
+}
+
+.toolbox-list .tool-item {
+    padding: 9px 8px 4px 8px;
+    background: #f5f6f7;
+    font-size: 14px;
+    font-weight: 500;
+    margin-right: 8px;
+}
+
+.toolbox-list .tool-active {
+    box-sizing: border-box;
+}
+
+.toolbox-list .tool-active:hover {
+    background: #96ccec;
+}
+
+.tag {
+    margin-right: 6px;
+}
+
+.related-question {
+    line-height: 30px;
+}
+
+.img-width {
+    width: 40%;
+}
+
+.new-line {
+    white-space: pre
 }

@@ -3,12 +3,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>秀森新生活</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="/static//css/bootstrap.min.css">
     <link rel="stylesheet" href="/static//css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/static//css/newlife.css">
     <script src="/static/js/jquery-3.4.1.min.js"></script>
     <script src="/static/js/comment.js"></script>
+    <script src="/static/js/moment.js"></script>
     <script src="/static/js/bootstrap.min.js" type="application/javascript"></script>
 </head>
 <body>
@@ -26,7 +27,12 @@
                 </span>
                 </h4>
                 <hr>
-                <h4 th:text="${question.description}"></h4>
+                <h4 class="new-line" th:text="${question.description}"></h4>
+                <hr>
+                <span class="label label-info tag" th:each="tag:${question.tag.split('，')}">
+                        <span class="glyphicon glyphicon-tags"></span>
+                        <span th:text="${tag}"></span>
+                </span>
                 <hr>
                 <a th:href="@{'/publish/' + ${question.id}}" th:if="${session.user.getName() == question.user.name}">
                     <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
@@ -39,20 +45,42 @@
                 <div class="media border-bottom" th:each="comment:${comments}">
                     <div class="media-left">
                         <a href="#">
-                            <img class="media-object img-rounded img-size" th:src="${comment.user.avatarUrl}" alt="smile">
+                            <img class="media-object img-rounded img-size" th:src="${comment.user.avatarUrl}"
+                                 alt="smile">
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading user-name" >
+                        <h4 class="media-heading user-name">
                             <span th:text="${comment.user.name}"></span>
                         </h4>
                         <h4><span th:text="${comment.content}"></span></h4>
                         <div class="menu">
-                            <span class="glyphicon glyphicon-thumbs-up icon" aria-hidden="true"></span>
-                            <span class="glyphicon glyphicon-thumbs-down icon" aria-hidden="true"></span>
-                            <span class="glyphicon glyphicon-comment icon" aria-hidden="true"></span>
-                        </div>
+                            <ul class="toolbox-list">
+                                <li class="tool-item tool-active" th:id="${'likeCount-' + comment.id}"
+                                    th:data-id="${comment.id}" onclick="likeCount(this)">
+                                    <span class="glyphicon glyphicon-thumbs-up icon"></span>
+                                    <span class="like" th:text="${comment.likeCount}"></span>
+                                </li>
 
+                                <li class="tool-item tool-active" th:data-id="${comment.id}"
+                                    onclick="deployComments(this)">
+                                    <span class="glyphicon glyphicon-comment icon"></span>
+                                    <span th:text="${comment.commentCount}"></span>
+                                </li>
+                            </ul>
+                            <span class="time" th:text="${#dates.format(comment.gmtCreate, 'YYYY-MM-dd')}"></span>
+                        </div>
+                        <!--二级评论-->
+                        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 collapse deploy"
+                             th:id="${'comment-' + comment.id}">
+                            <div>
+                                <input type="text" class="form-control form-deploy" placeholder="评论一下......"
+                                       th:id="${'input-' + comment.id}">
+                                <button type="button" class="btn btn-success pull-right btn-deploy"
+                                        th:data-id="${comment.id}" onclick="deployComment(this)">评论
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,15 +90,17 @@
                 <div class="media">
                     <div class="media-left">
                         <a href="#">
-                            <img class="media-object img-rounded img-size" th:src="${question.user.avatarUrl}" alt="smile">
+                            <img class="media-object img-rounded img-size" th:src="${question.user.avatarUrl}"
+                                 alt="smile">
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading user-name" >
+                        <h4 class="media-heading user-name">
                             <span th:text="${question.user.name}"></span>
                         </h4>
                     </div>
                 </div>
+
                 <textarea class="form-control comment-section" rows="6" id="question_comment"></textarea>
                 <button type="button" class="btn btn-success btn-comment" onclick="post()">回复</button>
             </div>
@@ -82,17 +112,27 @@
                 <div class="media">
                     <div class="media-left">
                         <a href="#">
-                            <img class="media-object img-circle img-size" th:src="${question.user.avatarUrl}" alt="smile">
+                            <img class="media-object img-circle img-size" th:src="${question.user.avatarUrl}"
+                                 alt="smile">
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading user-name" >
+                        <h4 class="media-heading user-name">
                             <span th:text="${question.user.name}"></span>
                         </h4>
                     </div>
                 </div>
                 <hr>
+                <h4>站长微信</h4>
+                <img class="img-width" src="../static/img/wechat.PNG" alt="simle">
+                <hr>
                 <h4>相关问题</h4>
+                <hr>
+                <ur class="related-question">
+                    <li th:each="question:${questionRelates}">
+                        <a th:href="@{'/question/' + ${question.id}}" th:text="${question.title}"></a>
+                    </li>
+                </ur>
             </div>
         </div>
     </div>

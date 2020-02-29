@@ -22,9 +22,11 @@ public class CommentDTO {
 
     private Long gmtModified;
 
-    private Long likeCount;
+    private Integer likeCount;
 
     private Integer commentator;
+
+    private Integer commentCount;
 
     private User user;
 }

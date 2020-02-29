@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import zxs.up.newlife.enums.CommentTypeEnum;
 import zxs.up.newlife.enums.CustomizeCodeEnum;
 import zxs.up.newlife.exception.CustomizeException;
+import zxs.up.newlife.mapper.CommentExcMapper;
 import zxs.up.newlife.mapper.CommentMapper;
 import zxs.up.newlife.mapper.QuestionExcMapper;
 import zxs.up.newlife.mapper.QuestionMapper;
@@ -21,6 +22,8 @@ public class CommentService {
 
     @Autowired
     private CommentMapper commentMapper;
+    @Autowired
+    private CommentExcMapper commentExcMapper;
 
     @Autowired
     private QuestionMapper questionMapper;
@@ -41,10 +44,11 @@ public class CommentService {
 
         if (CommentTypeEnum.COMMENT.getType() == comment.getType()) {
             //回复评论
-            Comment dbComment = commentMapper.selectByPrimaryKey(comment.getId());
+            Comment dbComment = commentMapper.selectByPrimaryKey(comment.getParentId());
             if (dbComment == null || dbComment.getId() == 0) {
                 throw new CustomizeException(CustomizeCodeEnum.COMMENT_NOT_FOUND);
             }
+            commentExcMapper.updateCommentCount(comment.getParentId());
         } else {
             //回复问题
             //判断回复问题是否存在
