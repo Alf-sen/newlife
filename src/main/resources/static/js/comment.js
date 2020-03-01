@@ -15,9 +15,9 @@ function f(targetId, content, type) {
         url: "/comment",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({
-            "parentId":targetId,
-            "content":content,
-            "type":type
+            "parentId": targetId,
+            "content": content,
+            "type": type
         }),
         success: function (response) {
             if (response.code == "2004") {
@@ -124,6 +124,23 @@ function likeCount(e) {
         });
         e.setAttribute("like", "add");
         e.classList.add("active");
+    }
+
+}
+
+function selectTag() {
+    $("#pub-tag").show();
+}
+function addTag(e) {
+    var tagName = e.getAttribute("data-id");
+    var tag = $("#tag").val();
+
+    if (tag) {
+        if (tag.indexOf(tagName) === -1) {
+            $("#tag").val(tag + "," + tagName);
+        }
+    } else {
+        $("#tag").val(tagName);
     }
 
 }

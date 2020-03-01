@@ -29,7 +29,7 @@
                 <hr>
                 <h4 class="new-line" th:text="${question.description}"></h4>
                 <hr>
-                <span class="label label-info tag" th:each="tag:${question.tag.split('，')}">
+                <span class="label label-info tag" th:each="tag:${question.tag.split(',')}">
                         <span class="glyphicon glyphicon-tags"></span>
                         <span th:text="${tag}"></span>
                 </span>
@@ -124,7 +124,7 @@
                 </div>
                 <hr>
                 <h4>站长微信</h4>
-                <img class="img-width" src="../static/img/wechat.PNG" alt="simle">
+                <img class="img-width img-thumbnail" src="../static/img/wechat.PNG" alt="simle">
                 <hr>
                 <h4>相关问题</h4>
                 <hr>

@@ -7,11 +7,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import zxs.up.newlife.cache.TagCache;
+import zxs.up.newlife.dto.TagDTO;
 import zxs.up.newlife.model.Question;
 import zxs.up.newlife.model.User;
 import zxs.up.newlife.service.QuestionService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @auther ZhangXiusen
@@ -27,16 +30,19 @@ public class PublishController {
     public String edit(@PathVariable(name = "id") Integer id,
                        Model model) {
         Question question = questionService.getQuestionById(id);
+        List<TagDTO> tags = TagCache.getTag();
         model.addAttribute("title", question.getTitle());
         model.addAttribute("description", question.getDescription());
         model.addAttribute("tag", question.getTag());
         model.addAttribute("id", question.getId());
+        model.addAttribute("tags", tags);
 
         return "publish";
     }
     @GetMapping("/publish")
-    public String publish() {
-
+    public String publish(Model model) {
+        List<TagDTO> tags = TagCache.getTag();
+        model.addAttribute("tags", tags);
         return "publish";
     }
 
@@ -47,6 +53,8 @@ public class PublishController {
                             @RequestParam(value = "id", required = false) Integer id,
                             HttpServletRequest request,
                             Model model) {
+        List<TagDTO> tags = TagCache.getTag();
+        model.addAttribute("tags", tags);
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);

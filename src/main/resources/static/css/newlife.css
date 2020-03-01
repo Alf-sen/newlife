@@ -53,6 +53,21 @@ body {
     border-top-color: rgb(254, 246, 247);
 }
 
+.border-tag-publish {
+    width: 26%;
+    display: none;
+    border-radius: 6px;
+    padding: 6px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #337ab7;
+}
+
+.tag-publish {
+    margin-top: 10px;
+    margin-right: 6px;
+}
+
 .menu {
     color: #999;
     margin-top: 5px;
@@ -122,6 +137,13 @@ body {
     margin-right: 6px;
 }
 
+.label-info {
+    margin-right: 6px;
+    margin-bottom: 5px;
+    display: inline-block;
+    white-space: normal;
+    background-color: #5bc0de;
+}
 .related-question {
     line-height: 30px;
 }

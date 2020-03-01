@@ -274,7 +274,7 @@ public class QuestionService {
     }
 
     public List<QuestionDTO> getRelatedQuestion(QuestionDTO question) {
-        String tag = StringUtils.replace(question.getTag(), "，", "|");
+        String tag = StringUtils.replace(question.getTag(), ",", "|");
         QuestionDTO questionDTO = new QuestionDTO();
         questionDTO.setTag(tag);
         questionDTO.setId(question.getId());
